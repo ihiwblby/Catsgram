@@ -1,5 +1,6 @@
 package ru.yandex.practicum.catsgram.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
@@ -11,8 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
     private final Map<Long, Post> posts = new HashMap<>();
+    private final UserService userService;
 
     public Collection<Post> findAll() {
         return posts.values();
@@ -22,7 +25,9 @@ public class PostService {
         if (post.getDescription() == null || post.getDescription().isBlank()) {
             throw new ConditionsNotMetException("Описание не может быть пустым");
         }
-
+        if (userService.findUserById(post.getAuthorId()).isEmpty()) {
+            throw new ConditionsNotMetException("Автор с ID = " + post.getAuthorId() + " не найден");
+        }
         post.setId(getNextId());
         post.setPostDate(Instant.now());
         posts.put(post.getId(), post);
