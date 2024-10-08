@@ -46,7 +46,7 @@ public class PostService {
             oldPost.setDescription(newPost.getDescription());
             return oldPost;
         }
-        throw new NotFoundException("Пост с id = " + newPost.getId() + " не найден");
+        throw new NotFoundException("Пост с ID = " + newPost.getId() + " не найден");
     }
 
     private long getNextId() {
@@ -56,5 +56,14 @@ public class PostService {
                 .max()
                 .orElse(0);
         return ++currentMaxId;
+    }
+
+    public Post getPostById(String  stringId) {
+        Long id = Long.parseLong(stringId);
+        if (posts.containsKey(id)) {
+            return posts.get(id);
+        } else {
+            throw new NotFoundException("Пост с ID " + id + " не найден");
+        }
     }
 }

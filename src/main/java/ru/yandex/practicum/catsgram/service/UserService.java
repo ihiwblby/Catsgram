@@ -80,7 +80,16 @@ public class UserService {
         throw new NotFoundException("Пользователь с id = " + newUser.getId() + " не найден");
     }
 
-    protected Optional<User> findUserById(Long id) {
+    public Optional<User> findUserById(Long id) {
        return Optional.ofNullable(users.get(id));
+    }
+
+    public User getUserById(String stringId) {
+        Long id = Long.parseLong(stringId);
+        if (users.containsKey(id)) {
+            return users.get(id);
+        } else {
+            throw new NotFoundException("Пользователь с ID " + id + " не найден");
+        }
     }
 }

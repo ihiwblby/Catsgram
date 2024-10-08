@@ -18,6 +18,11 @@ public class PostController {
         return postService.findAll();
     }
 
+    @GetMapping("/{postId}")
+    public Post getPostById(@PathVariable String postId) {
+        return postService.getPostById(postId);
+    }
+
     @PostMapping
     public Post create(@RequestBody Post post) {
         return postService.create(post);

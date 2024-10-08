@@ -18,6 +18,11 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable String userId) {
+        return userService.getUserById(userId);
+    }
+
     @PostMapping
     public User create(@RequestBody User user) {
         return userService.create(user);
