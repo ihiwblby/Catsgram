@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
 import ru.yandex.practicum.catsgram.model.Post;
+import ru.yandex.practicum.catsgram.model.SortOrder;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +19,19 @@ public class PostService {
     private final Map<Long, Post> posts = new HashMap<>();
     private final UserService userService;
 
-    public Collection<Post> findAll() {
-        return posts.values();
+    public Collection<Post> findAll(SortOrder sort, int size, int from) {
+        return switch (sort) {
+            case ASCENDING -> posts.values().stream()
+                    .sorted(Comparator.comparing(Post::getPostDate))
+                    .skip(from)
+                    .limit(size)
+                    .toList();
+            case DESCENDING -> posts.values().stream()
+                    .sorted(Comparator.comparing(Post::getPostDate).reversed())
+                    .skip(from)
+                    .limit(size)
+                    .toList();
+        };
     }
 
     public Post create(Post post) {
