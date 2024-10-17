@@ -79,4 +79,12 @@ public class PostService {
             throw new NotFoundException("Пост с ID " + id + " не найден");
         }
     }
+
+    public Post findById(long  id) {
+        if (posts.containsKey(id)) {
+            return posts.get(id);
+        } else {
+            throw new NotFoundException("Пост с ID " + id + " не найден");
+        }
+    }
 }
